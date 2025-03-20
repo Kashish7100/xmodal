@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React, { useState } from "react";
 
+
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -11,15 +12,12 @@ const App = () => {
     dob: "",
   });
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // Validate form on submit
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { username, email, phone, dob } = formData;
 
     if (!username) {
@@ -30,7 +28,7 @@ const App = () => {
       alert("Email is required.");
       return;
     }
-    if (!email.includes("@")) {
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
       alert("Invalid email. Please check your email address.");
       return;
     }
@@ -58,10 +56,8 @@ const App = () => {
 
   return (
     <div>
-      {/* Open Modal Button */}
       <button onClick={() => setIsOpen(true)}>Open Form</button>
 
-      {/* Modal Component */}
       {isOpen && (
         <div className="modal" onClick={() => setIsOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -93,4 +89,3 @@ const App = () => {
 };
 
 export default App;
-
