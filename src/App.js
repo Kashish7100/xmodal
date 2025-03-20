@@ -1,25 +1,96 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState } from "react";
 
-function App() {
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    dob: "",
+  });
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // Validate form on submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { username, email, phone, dob } = formData;
+
+    if (!username) {
+      alert("Username is required.");
+      return;
+    }
+    if (!email) {
+      alert("Email is required.");
+      return;
+    }
+    if (!email.includes("@")) {
+      alert("Invalid email. Please check your email address.");
+      return;
+    }
+    if (!phone) {
+      alert("Phone number is required.");
+      return;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      return;
+    }
+    if (!dob) {
+      alert("Date of Birth is required.");
+      return;
+    }
+    if (new Date(dob) > new Date()) {
+      alert("Invalid Date of Birth. Please enter a past date.");
+      return;
+    }
+
+    // Close modal and reset form
+    setIsOpen(false);
+    setFormData({ username: "", email: "", phone: "", dob: "" });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {/* Open Modal Button */}
+      <button onClick={() => setIsOpen(true)}>Open Form</button>
+
+      {/* Modal Component */}
+      {isOpen && (
+        <div className="modal" onClick={() => setIsOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Fill the Form</h2>
+            <form onSubmit={handleSubmit}>
+              <label>Username:</label>
+              <input id="username" type="text" value={formData.username} onChange={handleChange} />
+              <br />
+
+              <label>Email:</label>
+              <input id="email" type="text" value={formData.email} onChange={handleChange} />
+              <br />
+
+              <label>Phone Number:</label>
+              <input id="phone" type="text" value={formData.phone} onChange={handleChange} />
+              <br />
+
+              <label>Date of Birth:</label>
+              <input id="dob" type="date" value={formData.dob} onChange={handleChange} />
+              <br />
+
+              <button type="submit" className="submit-button">Submit</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
+
